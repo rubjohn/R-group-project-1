@@ -22,3 +22,5 @@ summary(as.factor(loan_data$loan_status))
 test 1
 
 test 2
+
+test 3 for video
