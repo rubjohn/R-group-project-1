@@ -11,7 +11,7 @@ library(tidyverse)
 
 #import loan information
 loan_data <- read.csv("loan_application.csv")
-http://127.0.0.1:29383/graphics/plot_zoom_png?width=722&height=809
+
 #summarize data
 summary(loan_data)
 
@@ -25,11 +25,12 @@ E1_ind.csv <-read.csv('E1_ind.csv')$x
 loan_train = loan_data[E1_ind.csv,] 
 loan_test = loan_data[-E1_ind.csv,]
 
-#use Rpart to create decision tree
+#use Rpart to create decision tree and plot
 loan_status_class <- rpart(loan_status ~ gender + total_income + dti + credit_score + education + employment, method="class", data=loan_train, cp = 0.015)
 rpart.plot(loan_status_class, tweak = 1.2)
-rpart.plot(titanic_tree_class_cp, extra = 104, tweak = 1.2)
-rpart.plot(titanic_tree_class_cp, extra = 1, tweak = 1.2)
+
+#create a deliberate error to debug with GenAI (comment out of code after completion)
+# loan_status_class_error <- rpart(loan_status ~ gender + total_income + dti + cr3dit_score + education + employment, method="class", data=loan_train, cp = 0.015)
 
 
 
