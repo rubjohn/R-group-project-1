@@ -34,7 +34,10 @@ rpart.plot(loan_status_class, extra = 104, tweak = 1.2)
 
 updated
 
+
 #Examine importance of predictor variables
 importance <- loan_status_class$variable.importance
 print(importance)
+
+
 # if you see this as the last line - this is the most up to date .R file
