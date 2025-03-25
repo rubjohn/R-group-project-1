@@ -32,8 +32,6 @@ rpart.plot(loan_status_class, extra = 104, tweak = 1.2)
 #create a deliberate error to debug with GenAI (comment out of code after completion)
 #loan_status_class_error <- rpart(loan_status ~ gender + total_income + dti + cr3dit_score + education + employment, method="class", data=loan_train, cp = 0.015)
 
-updated
-
 
 #Examine importance of predictor variables
 importance <- loan_status_class$variable.importance
