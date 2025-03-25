@@ -38,4 +38,6 @@ importance <- loan_status_class$variable.importance
 print(importance)
 
 
+#adjust tweak for plot
+rpart.plot(loan_status_class, extra = 104, tweak = 1.3)
 # if you see this as the last line - this is the most up to date .R file
