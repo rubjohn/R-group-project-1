@@ -5,9 +5,18 @@ install.packages("rpart")
 install.packages("rpart.plot")
 install.packages("tidyverse")
 
+#install forest packages
+install.packages('caTools')
+install.packages('randomForest')
+
 library(rpart)
 library(rpart.plot)
 library(tidyverse)
+# Loading forest package 
+library(caTools) 
+library(randomForest)
+
+#----------------------------------------------------#
 
 #import loan information
 loan_data <- read.csv("loan_application.csv")
@@ -49,17 +58,19 @@ rpart.plot(loan_status_class, main = "Loan Risk/Approval Determination", extra =
 loan_predict <- predict(loan_status_class, loan_test, type="class")
 table(loan_predict, loan_test$loan_status)
 
+#--------------------------------------------------------------------#
 
 ##create tree without credit score##
 
 #use Rpart to create decision tree and plot
-loan_status_class_no_credit <- rpart(loan_status ~ gender + total_income + dti + married + education + employment, method="class", data=loan_train, cp = 0.015)
+loan_status_class_no_credit <- rpart(loan_status ~ gender + total_income + dti + education + employment, method="class", data=loan_train, cp = 0.015)
 rpart.plot(loan_status_class_no_credit, extra = 104, tweak = 1.2)
 
 #predict outcome based on testing subset and produce confusion matrix
 loan_predict_no_credit <- predict(loan_status_class_no_credit, loan_test, type="class")
 table(loan_predict_no_credit, loan_test$loan_status)
 
+#--------------------------------------------------------------------#
 
 ## iterate through loans and see if results differ in each tree ##
 # Function to predict loan status using a tree model
@@ -86,5 +97,23 @@ for (i in 1:nrow(loan_data)) {
   }
 }
 
+#--------------------------------------------------------------------#
+
+# omit empty records for random forest
+loan_train_RF <- na.omit(loan_train)
+loan_test_RF <- na.omit(loan_test)
+
+# convert target variable to a factor for classification 
+loan_train_RF$loan_status <- as.factor(loan_train_RF$loan_status)
+loan_test_RF$loan_status <- as.factor(loan_test_RF$loan_status)
+
+# run the random forest model
+set.seed(2024) # for reproducibility
+loan_RF <- randomForest(loan_status ~ gender + total_income + dti + education + employment + total_loan, data = loan_train_RF, ntree = 400, mtry = 3) 
+
+# compute importance of the variables and compare with importance from tree without credit score
+importance(loan_RF)
+importance_no_credit <- loan_status_class_no_credit$variable.importance
+print(importance_no_credit)
 
 # if you see this as the last line - this is the most up to date .R file
