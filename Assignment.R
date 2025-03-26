@@ -38,6 +38,53 @@ importance <- loan_status_class$variable.importance
 print(importance)
 
 
-#adjust tweak for plot
+#adjust tweak for plot for better visualization and add title
 rpart.plot(loan_status_class, main = "Loan Risk/Approval Determination", extra = 104, tweak = 1.1)
+
+#compute impurity and adjusting extra argument
+rpart.plot(loan_status_class, main = "Loan Risk/Approval Determination", extra = 1, tweak = 1.1)
+
+
+#predict outcome based on testing subset and produce confusion matrix
+loan_predict <- predict(loan_status_class, loan_test, type="class")
+table(loan_predict, loan_test$loan_status)
+
+
+##create tree without credit score##
+
+#use Rpart to create decision tree and plot
+loan_status_class_no_credit <- rpart(loan_status ~ gender + total_income + dti + married + education + employment, method="class", data=loan_train, cp = 0.015)
+rpart.plot(loan_status_class_no_credit, extra = 104, tweak = 1.2)
+
+#predict outcome based on testing subset and produce confusion matrix
+loan_predict_no_credit <- predict(loan_status_class_no_credit, loan_test, type="class")
+table(loan_predict_no_credit, loan_test$loan_status)
+
+
+## iterate through loans and see if results differ in each tree ##
+# Function to predict loan status using a tree model
+predict_loan_status <- function(tree_model, record) {
+  predict(tree_model, newdata = record, type = "class")
+}
+
+# Iterate through each row in the dataset
+for (i in 1:nrow(loan_data)) {
+  record <- loan_data[i, ]
+  
+  # Predict loan status with both trees
+  prediction_with_credit_score <- predict_loan_status(loan_status_class, record)
+  prediction_without_credit_score <- predict_loan_status(loan_status_class_no_credit, record)
+  
+  # Check if predictions differ
+  if (prediction_with_credit_score != prediction_without_credit_score) {
+    print(paste("Record ID:", loan_data$loan_id[i]))
+    print("Record Details:")
+    print(loan_data[i, ])
+    print(paste("Prediction with credit score:", prediction_with_credit_score))
+    print(paste("Prediction without credit score:", prediction_without_credit_score))
+    break # Stop after finding the first different record
+  }
+}
+
+
 # if you see this as the last line - this is the most up to date .R file
