@@ -116,4 +116,7 @@ importance(loan_RF)
 importance_no_credit <- loan_status_class_no_credit$variable.importance
 print(importance_no_credit)
 
+# plot OBD error
+plot(loan_RF, main = "OOB Error Rate for Loan Random Forest")
+
 # if you see this as the last line - this is the most up to date .R file
