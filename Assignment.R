@@ -116,4 +116,14 @@ importance(loan_RF)
 importance_no_credit <- loan_status_class_no_credit$variable.importance
 print(importance_no_credit)
 
+# plot OBD error
+plot(loan_RF, main = "OOB Error Rate for Loan Random Forest")
+
+# Predict class directly on the test set
+loan_predict_RF_class <- predict(loan_RF, newdata = loan_test_RF, type = "class")
+
+# Create and print the confusion matrix
+cm_RF_class <- table(loan_predict_RF_class, loan_test_RF$loan_status)
+print(cm_RF_class)
+
 # if you see this as the last line - this is the most up to date .R file
