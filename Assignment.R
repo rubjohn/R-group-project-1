@@ -119,6 +119,7 @@ print(importance_no_credit)
 # plot OBD error
 plot(loan_RF, main = "OOB Error Rate for Loan Random Forest")
 
+<<<<<<< HEAD
 # Predict class directly on the test set
 loan_predict_RF_class <- predict(loan_RF, newdata = loan_test_RF, type = "class")
 
@@ -126,4 +127,6 @@ loan_predict_RF_class <- predict(loan_RF, newdata = loan_test_RF, type = "class"
 cm_RF_class <- table(loan_predict_RF_class, loan_test_RF$loan_status)
 print(cm_RF_class)
 
+=======
+>>>>>>> 5f969fa35f58ed1b226706e486eb7aeedeb23a16
 # if you see this as the last line - this is the most up to date .R file
